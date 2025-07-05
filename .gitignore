@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Key files
+*.pem
+*.jks
+*.keystore
