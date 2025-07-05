@@ -1,69 +1,81 @@
-# React + TypeScript + Vite
+# Step Counter 👣
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, mobile-friendly step counter app built with React, Vite, and Ionic/Capacitor. Track your steps, view session stats, and get real-time feedback on your walking activity.
 
-Currently, two official plugins are available:
+## Features ✨
+- Step counting with live updates
+- Session stats: steps, elapsed time, pace, and estimated distance
+- Start, stop, and reset tracking
+- Permission handling for device sensors
+- Responsive design for mobile and desktop
+- Instructions and error messages for user guidance
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack 🛠️
+- React + TypeScript
+- Vite
+- Ionic/Capacitor (for native device integration)
+- Tailwind CSS (for styling)
 
-## Expanding the ESLint configuration
+## Getting Started 🚀
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites 📦
+- Node.js (v16 or higher recommended)
+- npm or yarn
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Installation 🧑‍💻
+```bash
+git clone <repo-url>
+cd step-counter
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Running the App (Web) 🌐
+```bash
+npm run dev
 ```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Running on Android 📱
+1. Build the web assets:
+   ```bash
+   npm run build
+   ```
+2. Sync with Capacitor:
+   ```bash
+   npx cap sync android
+   ```
+3. Open Android Studio:
+   ```bash
+   npx cap open android
+   ```
+4. Run on an emulator or device.
+
+### Running on IOS 🍎
+1. Build the web assets:
+   ```bash
+   npm run build
+   ```
+2. Sync with Capacitor:
+   ```bash
+   npx cap sync ios
+   ```
+3. Open Xcode:
+   ```bash
+   npx cap open ios
+   ```
+4. Run on a simulator or IPhone.
+
+
+## Project Structure 🧬
+- `src/components/StepCounter.tsx` — Main step counter UI
+- `src/components/StepCounter/` — Subcomponents for stats, controls, instructions, etc.
+- `src/hooks/useStepCounter.ts` — Custom hook for step tracking logic
+- `src/utils/formatTime.ts` — Utility for formatting time
+- `android/` — Native Android project (Capacitor)
+
+## Customization 🎨
+- Update styles in `tailwind.config.js` and `App.css`
+- Modify step calculation logic in `useStepCounter.ts`
+
+## License 🪪
+BSD 3 Clause License
