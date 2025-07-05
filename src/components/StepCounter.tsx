@@ -67,7 +67,7 @@ const StepCounter: React.FC<StepCounterProps> = ({
           <StatusIndicator isTracking={isTracking} />
         </div>
       </div>
-      <div className="hidden md:flex flex-1 items-center justify-center p-8">
+      <div className="flex-1 flex items-center justify-center md:p-8">
         <Instructions />
       </div>
     </div>
