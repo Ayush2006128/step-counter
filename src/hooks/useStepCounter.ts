@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Motion } from '@capacitor/motion';
 
 export interface UseStepCounterResult {
   steps: number;
@@ -104,26 +105,13 @@ export function useStepCounter(): UseStepCounterResult {
     lastAcceleration.current = { x, y, z };
   };
 
-  // Handle device motion events
-  interface DeviceMotionEventWithAccel extends DeviceMotionEvent {
-    accelerationIncludingGravity: {
-      x: number | null;
-      y: number | null;
-      z: number | null;
-    } | null;
-  }
+  // Store the motion listener so we can remove it
+  const motionListener = useRef<any>(null);
 
-  const handleMotion = (event: DeviceMotionEventWithAccel): void => {
+  // Replace handleMotion to use @capacitor/motion
+  const handleMotion = (acceleration: { x: number; y: number; z: number }) => {
     if (!isTracking) return;
-    const acceleration = event.accelerationIncludingGravity;
-    if (
-      acceleration &&
-      acceleration.x !== null &&
-      acceleration.y !== null &&
-      acceleration.z !== null
-    ) {
-      detectStep(acceleration as { x: number; y: number; z: number });
-    }
+    detectStep(acceleration);
   };
 
   // Start tracking
@@ -132,21 +120,34 @@ export function useStepCounter(): UseStepCounterResult {
       await requestPermission();
       return;
     }
-    if (typeof DeviceMotionEvent === 'undefined') {
-      setError('Device motion not supported on this device/browser');
-      return;
-    }
     setIsTracking(true);
     setStartTime(Date.now());
     setSessionSteps(0);
     setElapsedTime(0);
-    window.addEventListener('devicemotion', handleMotion);
+    // Remove any previous listener
+    if (motionListener.current) {
+      motionListener.current.remove();
+    }
+    // Add new motion listener
+    motionListener.current = await Motion.addListener('accel', (event) => {
+      const { x, y, z } = event.accelerationIncludingGravity || {};
+      if (
+        typeof x === 'number' &&
+        typeof y === 'number' &&
+        typeof z === 'number'
+      ) {
+        handleMotion({ x, y, z });
+      }
+    });
   };
 
   // Stop tracking
   const stopTracking = () => {
     setIsTracking(false);
-    window.removeEventListener('devicemotion', handleMotion);
+    if (motionListener.current) {
+      motionListener.current.remove();
+      motionListener.current = null;
+    }
   };
 
   // Reset counters
