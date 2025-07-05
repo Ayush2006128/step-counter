@@ -1,0 +1,7 @@
+{
+  "name": "step counter",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
