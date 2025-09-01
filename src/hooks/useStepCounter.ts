@@ -64,8 +64,8 @@ export function useStepCounter(): UseStepCounterResult {
         } else {
           setError('Permission denied. Please enable motion sensors in your browser settings.');
         }
-      } catch (err: any) {
-        setError('Error requesting permission: ' + (err?.message || err));
+      } catch (err: unknown) {
+        setError('Error requesting permission: ' + (err instanceof Error ? err.message : String(err)));
       }
     } else {
       // For non-iOS devices, assume permission is granted
@@ -106,7 +106,7 @@ export function useStepCounter(): UseStepCounterResult {
   };
 
   // Store the motion listener so we can remove it
-  const motionListener = useRef<any>(null);
+  const motionListener = useRef<{ remove: () => void } | null>(null);
 
   // Replace handleMotion to use @capacitor/motion
   const handleMotion = (acceleration: { x: number; y: number; z: number }) => {
@@ -130,7 +130,7 @@ export function useStepCounter(): UseStepCounterResult {
     }
     // Add new motion listener
     motionListener.current = await Motion.addListener('accel', (event) => {
-      const { x, y, z } = event.accelerationIncludingGravity || {};
+      const { x, y, z } = event.acceleration || {};
       if (
         typeof x === 'number' &&
         typeof y === 'number' &&
