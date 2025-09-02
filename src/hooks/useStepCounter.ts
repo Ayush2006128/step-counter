@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Motion } from '@capacitor/motion';
+import type { PluginListenerHandle } from '@capacitor/core';
 
 export interface UseStepCounterResult {
   steps: number;
@@ -35,9 +36,9 @@ export function useStepCounter(): UseStepCounterResult {
 
   // Step detection variables
   const lastAcceleration = useRef({ x: 0, y: 0, z: 0 });
-  const stepThreshold = useRef(2.0);
+  const stepThreshold = useRef(0.15); // threshold for step detection
   const lastStepTime = useRef(0);
-  const minStepInterval = useRef(300); // minimum 300ms between steps
+  const minStepInterval = useRef(100); // minimum 100ms between steps
 
   // Timer for elapsed time
   useEffect(() => {
@@ -104,9 +105,8 @@ export function useStepCounter(): UseStepCounterResult {
     }
     lastAcceleration.current = { x, y, z };
   };
-
   // Store the motion listener so we can remove it
-  const motionListener = useRef<{ remove: () => void } | null>(null);
+  const motionListener = useRef<PluginListenerHandle | null>(null);
 
   // Replace handleMotion to use @capacitor/motion
   const handleMotion = (acceleration: { x: number; y: number; z: number }) => {
